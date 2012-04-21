@@ -21,25 +21,6 @@
 #include "../VAARDataModel/DataModel.h"
 #include "../VAARDataModel/Component.h"
 
-class ChangePositionCallback : public osg::NodeCallback {
-public:
-	ChangePositionCallback() : x_(0.0) {}
-
-	virtual void operator()(osg::Node* node, osg::NodeVisitor* nv) {
-		
-		osg::MatrixTransform* transform = dynamic_cast<osg::MatrixTransform*>(node);
-		if (transform) {
-			transform->setMatrix(osg::Matrix::translate(x_, 0, 0));
-			x_ += 10;
-			if (x_ > 1000.0)
-				x_ = 0.0;
-		}
-		traverse(node, nv);
-	}
-	
-private:
-	float x_;
-};
 
 osg::Geometry* CreatGeometry(
 	vaar_data::Component* component,
@@ -62,33 +43,6 @@ osg::Geometry* CreatGeometry(
 	);
 
 	return geometry.release();
-}
-
-void Draw(vaar_data::DataModel& data_model) {
-	osg::ref_ptr<osg::Geode> geode_1 = new osg::Geode;
-	osg::ref_ptr<osg::Geode> geode_2 = new osg::Geode;
-	
-	vaar_data::Component* component = data_model.GetRoot();
-	geode_1->addDrawable(CreatGeometry(component->GetSubComponents()->at(0), osg::Vec4f(1.0f, 0.0f, 0.0f, 1.0f)));
-	geode_2->addDrawable(CreatGeometry(component->GetSubComponents()->at(1), osg::Vec4f(0.0f, 0.0f, 0.8f, 1.0f)));
-
-	osg::ref_ptr<osg::Group> root = new osg::Group;
-
-	osg::ref_ptr<osg::MatrixTransform> transform_1 = new osg::MatrixTransform;
-	transform_1->setMatrix(osg::Matrix::translate(200, 0, 0));
-	transform_1->addChild(geode_1);
-	transform_1->setUpdateCallback(new ChangePositionCallback);
-
-	osg::ref_ptr<osg::MatrixTransform> transform_2 = new osg::MatrixTransform;
-	transform_2->setMatrix(osg::Matrix::translate(0, 0, 0));
-	transform_2->addChild(geode_2);
-
-	root->addChild(transform_1);
-	root->addChild(transform_2);
-
-	osgViewer::Viewer viwer;
-	viwer.setSceneData(root.get());
-	viwer.run();
 }
 
 osg::Group* createImageBackground(osg::Image* video) {
@@ -141,8 +95,7 @@ void Run(vaar_data::DataModel& data_model) {
 	osg::ref_ptr<osgART::Tracker> tracker = 
 		dynamic_cast<osgART::Tracker*>(osgART::PluginManager::instance()->get(_tracker_id));
 
-	if (!tracker.valid()) 
-	{
+	if (!tracker.valid()) {
 		// Without tracker an AR application can not work. Quit if none found.
 		osg::notify(osg::FATAL) << "Could not initialize tracker plugin!" << std::endl;
 		exit(-1);
@@ -152,8 +105,7 @@ void Run(vaar_data::DataModel& data_model) {
 	osg::ref_ptr<osgART::Calibration> calibration = tracker->getOrCreateCalibration();
 
 	// load a calibration file
-	if (!calibration->load(std::string("data/camera_para.dat"))) 
-	{
+	if (!calibration->load(std::string("data/camera_para.dat"))) {
 
 		// the calibration file was non-existing or couldnt be loaded
 		osg::notify(osg::FATAL) << "Non existing or incompatible calibration file" << std::endl;
@@ -170,12 +122,12 @@ void Run(vaar_data::DataModel& data_model) {
 	//if (!marker_1.valid() || !marker_2->valid()) 
 	if (!marker_1.valid()) {
 		// Without marker an AR application can not work. Quit if none found.
-		osg::notify(osg::FATAL) << "Could not add marker!" << std::endl;
+		osg::notify(osg::FATAL) << "Could not add marker_1!" << std::endl;
 		exit(-1);
 	}
 	if (!marker_2.valid()) {
 		// Without marker an AR application can not work. Quit if none found.
-		osg::notify(osg::FATAL) << "Could not add marker!" << std::endl;
+		osg::notify(osg::FATAL) << "Could not add marker_2!" << std::endl;
 		exit(-1);
 	}
 
@@ -220,7 +172,6 @@ int main() {
 	if (NULL != file_reader)
 		delete file_reader;
 
-	//Draw(*data_model);
 	Run(*data_model);
 
 	if (NULL != data_model)
