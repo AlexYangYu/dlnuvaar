@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\DataModelInputDecorator">
+      <UniqueIdentifier>{6658a128-ad91-4585-83ee-772ccc88ff4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\DataModelInputDecorator">
+      <UniqueIdentifier>{960f5e0d-aab4-433a-8d6b-59764eca8b3c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DataModelInputDecorator\ComponentInputDecorator.h">
+      <Filter>头文件\DataModelInputDecorator</Filter>
+    </ClInclude>
+    <ClInclude Include="DataModelInputDecorator\CurveInputDecorator.h">
+      <Filter>头文件\DataModelInputDecorator</Filter>
+    </ClInclude>
+    <ClInclude Include="DataModelInputDecorator\DataModelInputDecorator.h">
+      <Filter>头文件\DataModelInputDecorator</Filter>
+    </ClInclude>
+    <ClInclude Include="DataModelInputDecorator\EdgeInputDecorator.h">
+      <Filter>头文件\DataModelInputDecorator</Filter>
+    </ClInclude>
+    <ClInclude Include="DataModelInputDecorator\FaceInputDecorator.h">
+      <Filter>头文件\DataModelInputDecorator</Filter>
+    </ClInclude>
+    <ClInclude Include="DataModelInputDecorator\InputDecorator.h">
+      <Filter>头文件\DataModelInputDecorator</Filter>
+    </ClInclude>
+    <ClInclude Include="DataModelInputDecorator\MateEntityInputDecorator.h">
+      <Filter>头文件\DataModelInputDecorator</Filter>
+    </ClInclude>
+    <ClInclude Include="DataModelInputDecorator\MateInputDecorator.h">
+      <Filter>头文件\DataModelInputDecorator</Filter>
+    </ClInclude>
+    <ClInclude Include="DataModelInputDecorator\SurfaceInputDecorator.h">
+      <Filter>头文件\DataModelInputDecorator</Filter>
+    </ClInclude>
+    <ClInclude Include="DataModelInputDecorator\VertexInputDecorator.h">
+      <Filter>头文件\DataModelInputDecorator</Filter>
+    </ClInclude>
+    <ClInclude Include="FileReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="StrX.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DataModelInputDecorator\ComponentInputDecorator.cpp">
+      <Filter>源文件\DataModelInputDecorator</Filter>
+    </ClCompile>
+    <ClCompile Include="DataModelInputDecorator\CurveInputDecorator.cpp">
+      <Filter>源文件\DataModelInputDecorator</Filter>
+    </ClCompile>
+    <ClCompile Include="DataModelInputDecorator\DataModelInputDecorator.cpp">
+      <Filter>源文件\DataModelInputDecorator</Filter>
+    </ClCompile>
+    <ClCompile Include="DataModelInputDecorator\EdgeInputDecortor.cpp">
+      <Filter>源文件\DataModelInputDecorator</Filter>
+    </ClCompile>
+    <ClCompile Include="DataModelInputDecorator\FaceInputDecorator.cpp">
+      <Filter>源文件\DataModelInputDecorator</Filter>
+    </ClCompile>
+    <ClCompile Include="DataModelInputDecorator\MateEntityInputDecorator.cpp">
+      <Filter>源文件\DataModelInputDecorator</Filter>
+    </ClCompile>
+    <ClCompile Include="DataModelInputDecorator\MateInputDecorator.cpp">
+      <Filter>源文件\DataModelInputDecorator</Filter>
+    </ClCompile>
+    <ClCompile Include="DataModelInputDecorator\SurfaceInputDecorator.cpp">
+      <Filter>源文件\DataModelInputDecorator</Filter>
+    </ClCompile>
+    <ClCompile Include="DataModelInputDecorator\VertexInputDecorator.cpp">
+      <Filter>源文件\DataModelInputDecorator</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLReader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

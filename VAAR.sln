@@ -1,0 +1,70 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VAAR", "VAAR\VAAR.vcxproj", "{853DAF47-56A7-44B2-8AA3-6D7FE9B19F57}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VAARDataModel", "VAARDataModel\VAARDataModel.vcxproj", "{F0E9009A-F3C8-4B22-BEFD-BE764F74F419}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FileReader", "FileReader\FileReader.vcxproj", "{4D09661E-36E1-4431-92AF-476340F96DA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWAssemblyDocExtractionApplication", "SWAssemblyDocExtractionApplication\SWAssemblyDocExtractionApplication.csproj", "{6D79B74F-CF8D-4334-B176-AB9D945A97D4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|Win32 = Debug|Win32
+		Debug|x86 = Debug|x86
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|Win32 = Release|Win32
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{853DAF47-56A7-44B2-8AA3-6D7FE9B19F57}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{853DAF47-56A7-44B2-8AA3-6D7FE9B19F57}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{853DAF47-56A7-44B2-8AA3-6D7FE9B19F57}.Debug|Win32.ActiveCfg = Debug|Win32
+		{853DAF47-56A7-44B2-8AA3-6D7FE9B19F57}.Debug|Win32.Build.0 = Debug|Win32
+		{853DAF47-56A7-44B2-8AA3-6D7FE9B19F57}.Debug|x86.ActiveCfg = Debug|Win32
+		{853DAF47-56A7-44B2-8AA3-6D7FE9B19F57}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{853DAF47-56A7-44B2-8AA3-6D7FE9B19F57}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{853DAF47-56A7-44B2-8AA3-6D7FE9B19F57}.Release|Win32.ActiveCfg = Release|Win32
+		{853DAF47-56A7-44B2-8AA3-6D7FE9B19F57}.Release|Win32.Build.0 = Release|Win32
+		{853DAF47-56A7-44B2-8AA3-6D7FE9B19F57}.Release|x86.ActiveCfg = Release|Win32
+		{F0E9009A-F3C8-4B22-BEFD-BE764F74F419}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{F0E9009A-F3C8-4B22-BEFD-BE764F74F419}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{F0E9009A-F3C8-4B22-BEFD-BE764F74F419}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F0E9009A-F3C8-4B22-BEFD-BE764F74F419}.Debug|Win32.Build.0 = Debug|Win32
+		{F0E9009A-F3C8-4B22-BEFD-BE764F74F419}.Debug|x86.ActiveCfg = Debug|Win32
+		{F0E9009A-F3C8-4B22-BEFD-BE764F74F419}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{F0E9009A-F3C8-4B22-BEFD-BE764F74F419}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{F0E9009A-F3C8-4B22-BEFD-BE764F74F419}.Release|Win32.ActiveCfg = Release|Win32
+		{F0E9009A-F3C8-4B22-BEFD-BE764F74F419}.Release|Win32.Build.0 = Release|Win32
+		{F0E9009A-F3C8-4B22-BEFD-BE764F74F419}.Release|x86.ActiveCfg = Release|Win32
+		{4D09661E-36E1-4431-92AF-476340F96DA1}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{4D09661E-36E1-4431-92AF-476340F96DA1}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{4D09661E-36E1-4431-92AF-476340F96DA1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4D09661E-36E1-4431-92AF-476340F96DA1}.Debug|Win32.Build.0 = Debug|Win32
+		{4D09661E-36E1-4431-92AF-476340F96DA1}.Debug|x86.ActiveCfg = Debug|Win32
+		{4D09661E-36E1-4431-92AF-476340F96DA1}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{4D09661E-36E1-4431-92AF-476340F96DA1}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{4D09661E-36E1-4431-92AF-476340F96DA1}.Release|Win32.ActiveCfg = Release|Win32
+		{4D09661E-36E1-4431-92AF-476340F96DA1}.Release|Win32.Build.0 = Release|Win32
+		{4D09661E-36E1-4431-92AF-476340F96DA1}.Release|x86.ActiveCfg = Release|Win32
+		{6D79B74F-CF8D-4334-B176-AB9D945A97D4}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{6D79B74F-CF8D-4334-B176-AB9D945A97D4}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{6D79B74F-CF8D-4334-B176-AB9D945A97D4}.Debug|Win32.ActiveCfg = Debug|x86
+		{6D79B74F-CF8D-4334-B176-AB9D945A97D4}.Debug|x86.ActiveCfg = Debug|x86
+		{6D79B74F-CF8D-4334-B176-AB9D945A97D4}.Debug|x86.Build.0 = Debug|x86
+		{6D79B74F-CF8D-4334-B176-AB9D945A97D4}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{6D79B74F-CF8D-4334-B176-AB9D945A97D4}.Release|Mixed Platforms.Build.0 = Release|x86
+		{6D79B74F-CF8D-4334-B176-AB9D945A97D4}.Release|Win32.ActiveCfg = Release|x86
+		{6D79B74F-CF8D-4334-B176-AB9D945A97D4}.Release|x86.ActiveCfg = Release|x86
+		{6D79B74F-CF8D-4334-B176-AB9D945A97D4}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+EndGlobal
