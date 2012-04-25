@@ -54,57 +54,15 @@ osg::Group* CreateImageBackground(osg::Image* video) {
 	return _layer;
 } // CreateImageBackground
 
-class KeyboardEventHandler : public osgGA::GUIEventHandler {
-public:
-	// Constructor
-	KeyboardEventHandler(osg::MatrixTransform *matrix) : osgGA::GUIEventHandler(){
-		_scale_matrix = matrix;
-		_scale = 1.0;
-	} // constructor
-
-	virtual bool handle(
-		const osgGA::GUIEventAdapter &event_adapter, 
-		osgGA::GUIActionAdapter &acation_adapter
-	) {
-		//osg::notify(osg::NOTICE) << "Handling" << std::endl;
-		switch(event_adapter.getEventType()) {
-			case osgGA::GUIEventAdapter::KEYDOWN: {
-				switch(event_adapter.getKey()) {
-					case osgGA::GUIEventAdapter::KEY_J:
-						//osg::notify(osg::NOTICE) << "J pressed" << std::endl;
-						_scale -= 0.1;
-						_scale_matrix->setMatrix(osg::Matrix::scale(_scale, _scale, _scale));
-						osg::notify(osg::NOTICE) << _scale_matrix->getMatrix().getScale() << std::endl;
-						return true;
-					case osgGA::GUIEventAdapter::KEY_K:
-						//osg::notify(osg::NOTICE) << "K pressed" << std::endl;
-						_scale += 0.1;
-						_scale_matrix->setMatrix(osg::Matrix::scale(_scale, _scale, _scale));
-						osg::notify(osg::NOTICE) << _scale_matrix->getMatrix().getScale() << std::endl;
-						return true;
-				}
-			}
-			default:
-				return false;
-		}
-	} // handle
-
-private:
-	osg::ref_ptr<osg::MatrixTransform> _scale_matrix;
-	float _scale;
-}; // KeyboardEventHandler
-
 void Run(vaar_data::DataModel& data_model) {
 	// create a root node
 	osg::ref_ptr<osg::Group> root = new osg::Group;
-	osg::ref_ptr<osg::MatrixTransform> scale_matrix = new osg::MatrixTransform();
 	osgViewer::Viewer viewer;
 
 	// attach root node to the viewer
 	viewer.setSceneData(root.get());
 
 	// add relevant handlers to the viewer
-	viewer.addEventHandler(new KeyboardEventHandler(scale_matrix.get()));
 	viewer.addEventHandler(new osgViewer::StatsHandler);
 	viewer.addEventHandler(new osgViewer::WindowSizeHandler);
 	viewer.addEventHandler(new osgViewer::ThreadingHandler);
@@ -195,9 +153,8 @@ void Run(vaar_data::DataModel& data_model) {
 	videoBackground->getOrCreateStateSet()->setRenderBinDetails(0, "RenderBin");
 
 	osg::ref_ptr<osg::Camera> cam = calibration->createCamera();
-	scale_matrix->addChild(marker_trans_1.get());
-	scale_matrix->addChild(marker_trans_2.get());
-	cam->addChild(scale_matrix.get());
+	cam->addChild(marker_trans_1.get());
+	cam->addChild(marker_trans_2.get());
 	cam->addChild(videoBackground.get());
 
 	root->addChild(cam.get());
