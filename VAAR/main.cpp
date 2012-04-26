@@ -60,6 +60,32 @@ osg::Group* CreateImageBackground(osg::Image* video) {
 	return _layer;
 } // CreateImageBackground
 
+
+osg::Geode* CreateBoundingBox(osg::Geode *geode, const osg::BoundingBox *bounding_box) {
+	osg::ref_ptr<osg::Geode> box = new osg::Geode();
+	
+	osg::ref_ptr<osg::ShapeDrawable> box_shape = new osg::ShapeDrawable(
+		new osg::Box(
+			osg::Vec3(bounding_box->center()), 
+			bounding_box->xMax() - bounding_box->xMin(), 
+			bounding_box->yMax() - bounding_box->yMin(),
+			bounding_box->zMax() - bounding_box->zMin()
+		)
+	);
+	box_shape->setColor(osg::Vec4(0.0, 1.0, 0.0, 1.0));
+	osg::ref_ptr<osg::StateSet> box_state = box_shape->getOrCreateStateSet();
+	osg::ref_ptr<osg::PolygonMode> box_mode = new osg::PolygonMode(
+		osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE
+	);
+	box_state->setAttribute(box_mode.get());
+	osg::ref_ptr<osg::LineWidth> box_line_width = new osg::LineWidth(5.0);
+	box_state->setAttribute(box_line_width.get());
+	box->addDrawable(box_shape.get());
+
+	return box.release();
+} // CreateBoundingBox
+
+
 void Run(vaar_data::DataModel& data_model) {
 	// create a root node
 	osg::ref_ptr<osg::Group> root = new osg::Group;
@@ -155,28 +181,15 @@ void Run(vaar_data::DataModel& data_model) {
 	marker_trans_2->addChild(marker_geode_2.get());
 	marker_trans_2->getOrCreateStateSet()->setRenderBinDetails(100, "RenderBin");
 
+	// Bounding Box
 	osg::ComputeBoundsVisitor bound_visitor;
 	marker_geode_1->accept(bound_visitor);
-	osg::BoundingBox bounding_box = bound_visitor.getBoundingBox();
-	osg::ref_ptr<osg::Geode> box_1 = new osg::Geode();
-	osg::ref_ptr<osg::ShapeDrawable> box_shape = new osg::ShapeDrawable(
-		new osg::Box(
-			osg::Vec3(bounding_box.center()), 
-			bounding_box.xMax() - bounding_box.xMin(), 
-			bounding_box.yMax() - bounding_box.yMin(),
-			bounding_box.zMax() - bounding_box.zMin()
-		)
-	);
-	box_shape->setColor(osg::Vec4(0.0, 1.0, 0.0, 1.0));
-	osg::ref_ptr<osg::StateSet> box_state_1 = box_shape->getOrCreateStateSet();
-	osg::ref_ptr<osg::PolygonMode> box_mode_1 = new osg::PolygonMode(
-		osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE
-	);
-	box_state_1->setAttribute(box_mode_1.get());
-	osg::ref_ptr<osg::LineWidth> box_line_width = new osg::LineWidth(5.0);
-	box_state_1->setAttribute(box_line_width.get());
-	box_1->addDrawable(box_shape.get());
-	marker_trans_1->addChild(box_1.get());
+	osg::BoundingBox bounding_box_1 = bound_visitor.getBoundingBox();
+	marker_trans_1->addChild(CreateBoundingBox(marker_geode_1, &bounding_box_1));
+	bound_visitor.reset();
+	marker_geode_2->accept(bound_visitor);
+	osg::BoundingBox bounding_box_2 = bound_visitor.getBoundingBox();
+	marker_trans_2->addChild(CreateBoundingBox(marker_geode_2, &bounding_box_2));
 
 	osg::ref_ptr<osg::Group> videoBackground = CreateImageBackground(video.get());
 	videoBackground->getOrCreateStateSet()->setRenderBinDetails(0, "RenderBin");
