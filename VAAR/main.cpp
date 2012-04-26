@@ -26,6 +26,7 @@
 #include "FileReader.h"
 #include "../VAARDataModel/DataModel.h"
 #include "../VAARDataModel/Component.h"
+#include "KeyboardEventHandler.h"
 
 
 osg::Geometry* CreatGeometry(
@@ -85,16 +86,26 @@ osg::Geode* CreateBoundingBox(osg::Geode *geode, const osg::BoundingBox *boundin
 	return box.release();
 } // CreateBoundingBox
 
+void test() {
+	osg::notify(osg::NOTICE) << "pressed" << std::endl;
+}
 
 void Run(vaar_data::DataModel& data_model) {
 	// create a root node
 	osg::ref_ptr<osg::Group> root = new osg::Group;
 	osgViewer::Viewer viewer;
+	
+	// initialize keyboard handler
+	//KeyboardEventHandler *keyboard_handler = new KeyboardEventHandler();
+	//keyboard_handler->AddFunction(
+	//	osgGA::GUIEventAdapter::KEY_B, KeyboardEventHandler::KEY_DOWN, &test
+	//);
 
 	// attach root node to the viewer
 	viewer.setSceneData(root.get());
 
 	// add relevant handlers to the viewer
+	//viewer.addEventHandler(keyboard_handler);
 	viewer.addEventHandler(new osgViewer::StatsHandler);
 	viewer.addEventHandler(new osgViewer::WindowSizeHandler);
 	viewer.addEventHandler(new osgViewer::ThreadingHandler);
@@ -202,8 +213,9 @@ void Run(vaar_data::DataModel& data_model) {
 	root->addChild(cam.get());
 	video->start();
 	viewer.run();
+	//delete keyboard_handler;
 	video->close();
-}
+} // Run
 
 int main() {
 	vaar_data::DataModel* data_model = new vaar_data::DataModel();
@@ -219,4 +231,4 @@ int main() {
 		delete data_model;
 	
 	return 0;
-}
+} // main
