@@ -87,6 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="KeyEventHandler.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +104,9 @@
     <None Include="data\WDM_camera.xml" />
     <None Include="data\WDM_camera_flipV.xml" />
     <None Include="tutor.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="KeyboardEventHandler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
