@@ -21,7 +21,7 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="KeyEventHandler.cpp">
+    <ClCompile Include="KeyboardEventRouter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -52,6 +52,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="KeyboardEventRouter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="IEventHandler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="KeyboardEventHandler.h">
       <Filter>头文件</Filter>
     </ClInclude>

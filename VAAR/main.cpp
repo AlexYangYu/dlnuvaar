@@ -26,6 +26,7 @@
 #include "FileReader.h"
 #include "../VAARDataModel/DataModel.h"
 #include "../VAARDataModel/Component.h"
+#include "KeyboardEventRouter.h"
 #include "KeyboardEventHandler.h"
 
 
@@ -86,26 +87,25 @@ osg::Geode* CreateBoundingBox(osg::Geode *geode, const osg::BoundingBox *boundin
 	return box.release();
 } // CreateBoundingBox
 
-void test() {
-	osg::notify(osg::NOTICE) << "pressed" << std::endl;
-}
-
 void Run(vaar_data::DataModel& data_model) {
 	// create a root node
 	osg::ref_ptr<osg::Group> root = new osg::Group;
 	osgViewer::Viewer viewer;
-	
+	osg::ref_ptr<osg::Switch> switcher = new osg::Switch();
+
 	// initialize keyboard handler
-	//KeyboardEventHandler *keyboard_handler = new KeyboardEventHandler();
-	//keyboard_handler->AddFunction(
-	//	osgGA::GUIEventAdapter::KEY_B, KeyboardEventHandler::KEY_DOWN, &test
-	//);
+	KeyboardEventRouter *key_event_router = new KeyboardEventRouter();
+	key_event_router->AddHandler(
+		osgGA::GUIEventAdapter::KEY_B, 
+		KeyboardEventRouter::KEY_DOWN,
+		new KeyBDownHandler(switcher.get())
+	);
 
 	// attach root node to the viewer
 	viewer.setSceneData(root.get());
 
 	// add relevant handlers to the viewer
-	//viewer.addEventHandler(keyboard_handler);
+	viewer.addEventHandler(key_event_router);
 	viewer.addEventHandler(new osgViewer::StatsHandler);
 	viewer.addEventHandler(new osgViewer::WindowSizeHandler);
 	viewer.addEventHandler(new osgViewer::ThreadingHandler);
@@ -117,7 +117,7 @@ void Run(vaar_data::DataModel& data_model) {
 	//int _tracker_id = osgART::PluginManager::instance()->load("osgart_tracker_sstt");
 	int _tracker_id = osgART::PluginManager::instance()->load("osgart_tracker_artoolkit2");
 
-	// Load a video plugin.
+	// load a video plugin.
 	osg::ref_ptr<osgART::Video> video = 
 		dynamic_cast<osgART::Video*>(osgART::PluginManager::instance()->get(_video_id));
 
@@ -196,7 +196,8 @@ void Run(vaar_data::DataModel& data_model) {
 	osg::ComputeBoundsVisitor bound_visitor;
 	marker_geode_1->accept(bound_visitor);
 	osg::BoundingBox bounding_box_1 = bound_visitor.getBoundingBox();
-	marker_trans_1->addChild(CreateBoundingBox(marker_geode_1, &bounding_box_1));
+	switcher->addChild(CreateBoundingBox(marker_geode_1, &bounding_box_1));
+	marker_trans_1->addChild(switcher.get());
 	bound_visitor.reset();
 	marker_geode_2->accept(bound_visitor);
 	osg::BoundingBox bounding_box_2 = bound_visitor.getBoundingBox();
@@ -213,7 +214,6 @@ void Run(vaar_data::DataModel& data_model) {
 	root->addChild(cam.get());
 	video->start();
 	viewer.run();
-	//delete keyboard_handler;
 	video->close();
 } // Run
 

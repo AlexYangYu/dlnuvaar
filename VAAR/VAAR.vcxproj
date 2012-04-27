@@ -87,7 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="KeyEventHandler.cpp" />
+    <ClCompile Include="KeyboardEventRouter.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -106,7 +106,9 @@
     <None Include="tutor.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IEventHandler.h" />
     <ClInclude Include="KeyboardEventHandler.h" />
+    <ClInclude Include="KeyboardEventRouter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
