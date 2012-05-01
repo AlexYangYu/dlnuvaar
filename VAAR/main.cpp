@@ -9,6 +9,7 @@
 #include <osg/LineWidth>
 #include <osg/ShapeDrawable>
 #include <osg/StateSet>
+#include <osg/NodeCallback>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 #include <osgDB/FileUtils>
@@ -63,7 +64,11 @@ osg::Group* CreateImageBackground(osg::Image* video) {
 } // CreateImageBackground
 
 
-osg::Geode* CreateBoundingBox(osg::Geode *geode, const osg::BoundingBox *bounding_box) {
+osg::Geode* CreateBoundingBox(
+	const osg::BoundingBox *bounding_box,
+	const float line_width,
+	const osg::Vec4 color
+) {
 	osg::ref_ptr<osg::Geode> box = new osg::Geode();
 	
 	osg::ref_ptr<osg::ShapeDrawable> box_shape = new osg::ShapeDrawable(
@@ -74,31 +79,129 @@ osg::Geode* CreateBoundingBox(osg::Geode *geode, const osg::BoundingBox *boundin
 			bounding_box->zMax() - bounding_box->zMin()
 		)
 	);
-	box_shape->setColor(osg::Vec4(0.0, 1.0, 0.0, 1.0));
+	box_shape->setColor(color);
 	osg::ref_ptr<osg::StateSet> box_state = box_shape->getOrCreateStateSet();
 	osg::ref_ptr<osg::PolygonMode> box_mode = new osg::PolygonMode(
 		osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE
 	);
-	box_state->setAttribute(box_mode.get());
-	osg::ref_ptr<osg::LineWidth> box_line_width = new osg::LineWidth(5.0);
-	box_state->setAttribute(box_line_width.get());
+	box_state->setAttributeAndModes(box_mode.get());
+	box_state->setAttribute(new osg::LineWidth(line_width));
 	box->addDrawable(box_shape.get());
 
 	return box.release();
 } // CreateBoundingBox
 
+
+class WorldCoordNodeVistor : public osg::NodeVisitor {
+public:
+	WorldCoordNodeVistor():
+	    osg::NodeVisitor(osg::NodeVisitor::TRAVERSE_PARENTS),
+		done(false) {
+		_wc_matrix = NULL;
+	} // WorldCoordNodeVistor
+
+	~WorldCoordNodeVistor() {
+		delete _wc_matrix;
+	}
+
+	virtual void apply(osg::Node &node) {
+		if (!done) {
+			if (0 == node.getNumParents()) {
+				_wc_matrix = new osg::Matrix();
+				_wc_matrix->set(osg::computeLocalToWorld(this->getNodePath()));
+				done = true;
+			}
+			traverse(node);
+		}
+	} // apply
+
+	osg::Matrix* GetMatrix() {
+		return _wc_matrix;
+	}
+private:
+	bool done;
+	osg::Matrix *_wc_matrix;
+}; // WorldCoordNodeVistor
+
+
+class CollisionDetectionCallback : public osg::NodeCallback {
+public:
+	CollisionDetectionCallback(
+		osg::BoundingBox *box_1, 
+		osg::BoundingBox *box_2,
+		osg::Node *node_1,
+		osg::Node *node_2,
+		osg::Node *root
+	) {
+		_box_1 = box_1;
+		_box_2 = box_2;
+		_node_1 = node_1;
+		_node_2 = node_2;
+		_root = root;
+	} // CollisionDetectionCallback
+
+	~CollisionDetectionCallback() {
+	}
+
+	virtual void operator()(osg::Node *node, osg::NodeVisitor *node_visitor) {
+		// Get the local to world matrix.
+		osg::Matrix *wc_mat_1, *wc_mat_2;
+		WorldCoordNodeVistor wc_visitor_1, wc_visitor_2;
+
+		_node_1->accept(wc_visitor_1);
+		wc_mat_1 = wc_visitor_1.GetMatrix();
+		_node_2->accept(wc_visitor_2);
+		wc_mat_2 = wc_visitor_2.GetMatrix();
+
+		if (wc_mat_1 == NULL || wc_mat_2 == NULL) {
+			osg::notify(osg::NOTICE) << "Not Collision Detected!" << std::endl;
+			return;
+		}
+		
+		// Update bounding box.
+		osg::BoundingBox temp_box_1, temp_box_2;
+		for (unsigned int i = 0; i < 8; ++i) {
+			temp_box_1.expandBy(_box_1->corner(i) * (*wc_mat_1));
+			temp_box_2.expandBy(_box_2->corner(i) * (*wc_mat_2));
+		}
+
+		// BoundingBox-BoudingBox collision detection.
+		if (temp_box_1.intersects(temp_box_2)) {
+			osg::notify(osg::NOTICE) << "Collision Detected - Bounding Box!" << std::endl;
+			// BoundgingBox-Triangles collision detection.
+			// Triangles-Triangles collision detection.
+		} else {
+			osg::notify(osg::NOTICE) << "Not Collision Detected!" << std::endl;
+			return;
+		}
+	} // operator£¨)
+private:
+	osg::BoundingBox *_box_1, *_box_2;
+	osg::Node *_node_1, *_node_2, *_root;
+}; // CollisionDetectionCallback
+
 void Run(vaar_data::DataModel& data_model) {
 	// create a root node
 	osg::ref_ptr<osg::Group> root = new osg::Group;
-	osgViewer::Viewer viewer;
-	osg::ref_ptr<osg::Switch> switcher = new osg::Switch();
+	root->setName("Root");
 
+	osgViewer::Viewer viewer;
+	osg::ref_ptr<osg::Switch> switcher_b = new osg::Switch();
+	switcher_b->setName("Switcher B");
+	osg::ref_ptr<osg::Switch> switcher_n = new osg::Switch();
+	switcher_n->setName("Switcher N");
+	
 	// initialize keyboard handler
 	KeyboardEventRouter *key_event_router = new KeyboardEventRouter();
 	key_event_router->AddHandler(
 		osgGA::GUIEventAdapter::KEY_B, 
 		KeyboardEventRouter::KEY_DOWN,
-		new KeyBDownHandler(switcher.get())
+		new KeyBDownHandler(switcher_b.get())
+	);
+	key_event_router->AddHandler(
+		osgGA::GUIEventAdapter::KEY_N, 
+		KeyboardEventRouter::KEY_DOWN,
+		new KeyBDownHandler(switcher_n.get())
 	);
 
 	// attach root node to the viewer
@@ -175,11 +278,15 @@ void Run(vaar_data::DataModel& data_model) {
 
 	osg::ref_ptr<osg::MatrixTransform> marker_trans_1 = new osg::MatrixTransform();
 	osgART::attachDefaultEventCallbacks(marker_trans_1.get(), marker_1.get());
+	marker_trans_1->setName("MarkerTrans 1");
 	osg::ref_ptr<osg::MatrixTransform> marker_trans_2 = new osg::MatrixTransform();
 	osgART::attachDefaultEventCallbacks(marker_trans_2.get(), marker_2.get());
+	marker_trans_2->setName("MarkerTrans 2");
 
 	osg::ref_ptr<osg::Geode> marker_geode_1 = new osg::Geode;
+	marker_geode_1->setName("MarkerGeode 1");
 	osg::ref_ptr<osg::Geode> marker_geode_2 = new osg::Geode;
+	marker_geode_2->setName("MarkerGeode 2");
 	vaar_data::Component* component = data_model.GetRoot();
 	marker_geode_1->addDrawable(
 		CreatGeometry(component->GetSubComponents()->at(0), osg::Vec4f(1.0f, 0.0f, 0.0f, 1.0f))
@@ -196,12 +303,21 @@ void Run(vaar_data::DataModel& data_model) {
 	osg::ComputeBoundsVisitor bound_visitor;
 	marker_geode_1->accept(bound_visitor);
 	osg::BoundingBox bounding_box_1 = bound_visitor.getBoundingBox();
-	switcher->addChild(CreateBoundingBox(marker_geode_1, &bounding_box_1));
-	marker_trans_1->addChild(switcher.get());
+	switcher_b->addChild(
+		CreateBoundingBox(
+			&bounding_box_1, 5.0, osg::Vec4(0.0, 1.0, 0.0, 1.0)
+		)
+	);
+	marker_trans_1->addChild(switcher_b.get());
 	bound_visitor.reset();
 	marker_geode_2->accept(bound_visitor);
 	osg::BoundingBox bounding_box_2 = bound_visitor.getBoundingBox();
-	marker_trans_2->addChild(CreateBoundingBox(marker_geode_2, &bounding_box_2));
+	switcher_n->addChild(
+		CreateBoundingBox(
+			&bounding_box_2, 5.0, osg::Vec4(0.0, 1.0, 0.0, 1.0)
+		)
+	);
+	marker_trans_2->addChild(switcher_n.get());
 
 	osg::ref_ptr<osg::Group> videoBackground = CreateImageBackground(video.get());
 	videoBackground->getOrCreateStateSet()->setRenderBinDetails(0, "RenderBin");
@@ -212,6 +328,11 @@ void Run(vaar_data::DataModel& data_model) {
 	cam->addChild(videoBackground.get());
 
 	root->addChild(cam.get());
+	root->setUpdateCallback(
+		new CollisionDetectionCallback(
+			&bounding_box_1, &bounding_box_2, marker_geode_1.get(), marker_geode_2.get(), root.get()
+		)
+	);
 	video->start();
 	viewer.run();
 	video->close();
