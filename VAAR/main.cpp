@@ -260,7 +260,7 @@ void Run(vaar_data::DataModel& data_model) {
 
 	//osg::ref_ptr<osgART::Marker> marker_1 = tracker->addMarker("single;data/patt.hiro;80;0;0");
 	osg::ref_ptr<osgART::Marker> marker_1 = tracker->addMarker("multi;data/multi/marker.dat");
-	osg::ref_ptr<osgART::Marker> marker_2 = tracker->addMarker("single;data/patt.kanji;80;0;0");
+	osg::ref_ptr<osgART::Marker> marker_2 = tracker->addMarker("single;data/patt.kanji;80;0;0");	
 	if (!marker_1.valid()) {
 		// Without marker an AR application can not work. Quit if none found.
 		osg::notify(osg::FATAL) << "Could not add marker_1!" << std::endl;
@@ -272,15 +272,23 @@ void Run(vaar_data::DataModel& data_model) {
 		exit(-1);
 	}
 
+	// activate
 	marker_1->setActive(true);
 	marker_2->setActive(true);
+
+	// avoid jitter
+	osg::ref_ptr<osgART::TransformFilterCallback> filter = new osgART::TransformFilterCallback();
+	filter->enableRotationalSmoothing(true);
+	filter->enableTranslationalSmoothing(true);
 
 	osg::ref_ptr<osg::MatrixTransform> marker_trans_1 = new osg::MatrixTransform();
 	osgART::attachDefaultEventCallbacks(marker_trans_1.get(), marker_1.get());
 	marker_trans_1->setName("MarkerTrans 1");
+	marker_trans_1->addUpdateCallback(filter);
 	osg::ref_ptr<osg::MatrixTransform> marker_trans_2 = new osg::MatrixTransform();
 	osgART::attachDefaultEventCallbacks(marker_trans_2.get(), marker_2.get());
 	marker_trans_2->setName("MarkerTrans 2");
+	marker_trans_2->addUpdateCallback(filter);
 
 	osg::ref_ptr<osg::Geode> marker_geode_1 = new osg::Geode;
 	marker_geode_1->setName("MarkerGeode 1");
