@@ -130,14 +130,12 @@ public:
 		osg::BoundingBox *box_1, 
 		osg::BoundingBox *box_2,
 		osg::Node *node_1,
-		osg::Node *node_2,
-		osg::Node *root
+		osg::Node *node_2
 	) {
 		_box_1 = box_1;
 		_box_2 = box_2;
 		_node_1 = node_1;
 		_node_2 = node_2;
-		_root = root;
 	} // CollisionDetectionCallback
 
 	~CollisionDetectionCallback() {
@@ -177,7 +175,7 @@ public:
 	} // operator£¨)
 private:
 	osg::BoundingBox *_box_1, *_box_2;
-	osg::Node *_node_1, *_node_2, *_root;
+	osg::Node *_node_1, *_node_2;
 }; // CollisionDetectionCallback
 
 void Run(vaar_data::DataModel& data_model) {
@@ -330,7 +328,7 @@ void Run(vaar_data::DataModel& data_model) {
 	root->addChild(cam.get());
 	root->setUpdateCallback(
 		new CollisionDetectionCallback(
-			&bounding_box_1, &bounding_box_2, marker_geode_1.get(), marker_geode_2.get(), root.get()
+			&bounding_box_1, &bounding_box_2, marker_geode_1.get(), marker_geode_2.get()
 		)
 	);
 	video->start();
