@@ -16,6 +16,9 @@
     <Filter Include="资源文件\data">
       <UniqueIdentifier>{0ae8ba96-e75a-4b0e-b46d-94080a4ac09e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="资源文件\data\multi">
+      <UniqueIdentifier>{d04a6b3f-20e1-4a74-9a5c-9df673d4cc9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -49,6 +52,27 @@
     </None>
     <None Include="tutor.xml">
       <Filter>资源文件</Filter>
+    </None>
+    <None Include="data\multi\marker.dat">
+      <Filter>资源文件\data\multi</Filter>
+    </None>
+    <None Include="data\multi\patt_a">
+      <Filter>资源文件\data\multi</Filter>
+    </None>
+    <None Include="data\multi\patt_b">
+      <Filter>资源文件\data\multi</Filter>
+    </None>
+    <None Include="data\multi\patt_c">
+      <Filter>资源文件\data\multi</Filter>
+    </None>
+    <None Include="data\multi\patt_d">
+      <Filter>资源文件\data\multi</Filter>
+    </None>
+    <None Include="data\multi\patt_f">
+      <Filter>资源文件\data\multi</Filter>
+    </None>
+    <None Include="data\multi\patt_g">
+      <Filter>资源文件\data\multi</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

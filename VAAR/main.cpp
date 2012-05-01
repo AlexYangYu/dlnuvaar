@@ -258,7 +258,8 @@ void Run(vaar_data::DataModel& data_model) {
 
 	osgART::TrackerCallback::addOrSet(root.get(), tracker.get());
 
-	osg::ref_ptr<osgART::Marker> marker_1 = tracker->addMarker("single;data/patt.hiro;80;0;0");
+	//osg::ref_ptr<osgART::Marker> marker_1 = tracker->addMarker("single;data/patt.hiro;80;0;0");
+	osg::ref_ptr<osgART::Marker> marker_1 = tracker->addMarker("multi;data/multi/marker.dat");
 	osg::ref_ptr<osgART::Marker> marker_2 = tracker->addMarker("single;data/patt.kanji;80;0;0");
 	if (!marker_1.valid()) {
 		// Without marker an AR application can not work. Quit if none found.
