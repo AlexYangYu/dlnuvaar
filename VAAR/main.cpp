@@ -42,9 +42,14 @@ osg::Geometry* CreatGeometry(
 	geometry->setNormalBinding(osg::Geometry::BIND_PER_VERTEX);
 
 	osg::ref_ptr<osg::Vec4Array> color_array = new osg::Vec4Array;
-	color_array->push_back(color);
+	//color_array->push_back(color);
+	//geometry->setColorArray(color_array.get());
+	//geometry->setColorBinding(osg::Geometry::BIND_OVERALL);
+	color_array->push_back(osg::Vec4(1.0, 0.0, 0.0, 1.0));
+	color_array->push_back(osg::Vec4(0.0, 1.0, 0.0, 1.0));
+	color_array->push_back(osg::Vec4(0.0, 0.0, 1.0, 1.0));
 	geometry->setColorArray(color_array.get());
-	geometry->setColorBinding(osg::Geometry::BIND_OVERALL);
+	geometry->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
 
 	geometry->addPrimitiveSet(
 		new osg::DrawArrays(osg::PrimitiveSet::TRIANGLES, 0, component->GetRefPtrTriangles()->size())
@@ -301,7 +306,11 @@ void Run(vaar_data::DataModel& data_model) {
 	marker_geode_2->addDrawable(
 		CreatGeometry(component->GetSubComponents()->at(1), osg::Vec4f(0.0f, 0.0f, 0.8f, 1.0f))
 	);
-	marker_trans_1->addChild(marker_geode_1.get());
+	osg::ref_ptr<osg::MatrixTransform> scale = new osg::MatrixTransform();
+	scale->setMatrix(osg::Matrix::scale(0.2, 0.2, 0.2));
+	scale->addChild(marker_geode_1.get());
+	marker_trans_1->addChild(scale.get());
+	//marker_trans_1->addChild(marker_geode_1.get());
 	marker_trans_1->getOrCreateStateSet()->setRenderBinDetails(100, "RenderBin");
 	marker_trans_2->addChild(marker_geode_2.get());
 	marker_trans_2->getOrCreateStateSet()->setRenderBinDetails(100, "RenderBin");
