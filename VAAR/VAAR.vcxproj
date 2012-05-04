@@ -96,7 +96,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="asmexample.xml" />
     <None Include="data\camera_para.dat" />
+    <None Include="data\multi\marker.dat" />
+    <None Include="data\multi\patt_a" />
+    <None Include="data\multi\patt_b" />
+    <None Include="data\multi\patt_c" />
+    <None Include="data\multi\patt_d" />
+    <None Include="data\multi\patt_f" />
+    <None Include="data\multi\patt_g" />
     <None Include="data\patt.hiro" />
     <None Include="data\patt.kanji" />
     <None Include="data\patt.sample1" />
