@@ -25,14 +25,15 @@ int main(int argc, char **argv) {
 	
 	printf("5\n\n");
 	
-	osg::Matrix mat_a;
-	OutputMatrix(&mat_a, 'a', MARKER_LEN);
+	osg::ref_ptr<osg::MatrixTransform> mat_a = new osg::MatrixTransform();
+	mat_a->setMatrix(osg::Matrix::translate(0.0, 0.0, -40.0));
+	OutputMatrix(&(mat_a->getMatrix()), 'a', MARKER_LEN);
 	printf("\n");
 
 	osg::ref_ptr<osg::MatrixTransform> mat_b = new osg::MatrixTransform();
 	mat_b->setMatrix(
 		osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(90.0), osg::Vec3(1, 0, 0))) * 
-		osg::Matrix::translate(0.0, -20.0, -20.0)
+		osg::Matrix::translate(0.0, -20.0, -40.0)
 	);
 	OutputMatrix(&(mat_b->getMatrix()), 'b', MARKER_LEN);
 	printf("\n");
@@ -41,7 +42,7 @@ int main(int argc, char **argv) {
 	mat_c->setMatrix(
 		osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(180.0), osg::Vec3(0, 0, 1))) *
 		osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(-90.0), osg::Vec3(1, 0, 0))) *
-		osg::Matrix::translate(0.0, 20.0, -20.0)
+		osg::Matrix::translate(0.0, 20.0, -40.0)
 	);
 	OutputMatrix(&(mat_c->getMatrix()), 'c', MARKER_LEN);
 	printf("\n");
@@ -50,7 +51,7 @@ int main(int argc, char **argv) {
 	mat_d->setMatrix(
 		osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(-90.0), osg::Vec3(0, 0, 1))) *
 		osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(-90.0), osg::Vec3(0, 1, 0))) *
-		osg::Matrix::translate(-20.0, 0.0, -20.0)
+		osg::Matrix::translate(-20.0, 0.0, -40.0)
 		);
 	OutputMatrix(&(mat_d->getMatrix()), 'd', MARKER_LEN);
 	printf("\n");
@@ -59,7 +60,7 @@ int main(int argc, char **argv) {
 	mat_f->setMatrix(
 		osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(90.0), osg::Vec3(0, 0, 1))) *
 		osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(90.0), osg::Vec3(0, 1, 0))) *
-		osg::Matrix::translate(20.0, 0.0, -20.0)
+		osg::Matrix::translate(20.0, 0.0, -40.0)
 	);
 	OutputMatrix(&(mat_f->getMatrix()), 'f', MARKER_LEN);
 
