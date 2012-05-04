@@ -96,6 +96,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="asmexample.xml" />
     <None Include="data\camera_para.dat" />
     <None Include="data\multi\marker.dat" />
     <None Include="data\multi\patt_a" />

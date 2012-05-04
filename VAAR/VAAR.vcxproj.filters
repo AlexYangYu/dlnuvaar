@@ -74,6 +74,9 @@
     <None Include="data\multi\patt_g">
       <Filter>资源文件\data\multi</Filter>
     </None>
+    <None Include="asmexample.xml">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KeyboardEventRouter.h">
