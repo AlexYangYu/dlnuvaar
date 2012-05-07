@@ -118,6 +118,7 @@
     <ClInclude Include="IEventHandler.h" />
     <ClInclude Include="KeyboardEventHandler.h" />
     <ClInclude Include="KeyboardEventRouter.h" />
+    <ClInclude Include="TriTriIntersection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

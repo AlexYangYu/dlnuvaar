@@ -29,6 +29,7 @@
 #include "../VAARDataModel/Component.h"
 #include "KeyboardEventRouter.h"
 #include "KeyboardEventHandler.h"
+#include "TriTriIntersection.h"
 
 
 osg::Geometry* CreatGeometry(
@@ -182,17 +183,19 @@ public:
 				asGeometry()->getVertexArray();
 			
 			osg::Vec3Array *arr_first_check, *arr_second_check;
-			osg::Matrix *mat_to_check;
+			osg::Matrix *mat_to_check, *mat_to_tri;
 			osg::BoundingBox *box_to_check;
 			if (temp_arr_1->getTotalDataSize() < temp_arr_2->getTotalDataSize()) {
 				arr_first_check = dynamic_cast<osg::Vec3Array *>(temp_arr_1);
 				arr_second_check = dynamic_cast<osg::Vec3Array *>(temp_arr_2);
 				mat_to_check = wc_mat_1;
+				mat_to_tri = wc_mat_2;
 				box_to_check = &temp_box_2;
 			} else {
 				arr_first_check = dynamic_cast<osg::Vec3Array *>(temp_arr_2);
 				arr_second_check = dynamic_cast<osg::Vec3Array *>(temp_arr_1);
 				mat_to_check = wc_mat_2;
+				mat_to_tri = wc_mat_1;
 				box_to_check = &temp_box_1;
 			}
 
@@ -210,8 +213,13 @@ public:
 				CheckIntersection(vec_x, vec_y, vec_z, mat_to_check, box_to_check);
 			}
 
-			osg::notify(osg::NOTICE) << _checked_arr->size() << std::endl;
-			// Triangles-Triangles collision detection.
+			osg::notify(osg::NOTICE) << _checked_arr->size() / 3 << std::endl;
+			
+			/* Triangles-Triangles collision detection. */
+			if (TriTriCheck(_checked_arr.get(), arr_second_check, *mat_to_tri)) {
+				osg::notify(osg::NOTICE) << "Triangle Collision Detected!" << std::endl;
+			}
+			
 		} else {
 			osg::notify(osg::NOTICE) << "Not Collision Detected!" << std::endl;
 			return;
@@ -246,6 +254,41 @@ public:
 			_checked_arr->push_back(vec_z);
 		}
 		return flag;
+	}
+
+	bool TriTriCheck(osg::Vec3Array *checked_arr, osg::Vec3Array *to_check_arr, const osg::Matrix &mat) {
+		if (checked_arr->size() > 0) {
+			for (osg::Vec3Array::iterator itx = checked_arr->begin();
+				itx != checked_arr->end(); ) {
+				
+				osg::Vec3f vecf_a(itx->x(), itx->y(), itx->z());
+				++itx;
+				osg::Vec3f vecf_b(itx->x(), itx->y(), itx->z());
+				++itx;
+				osg::Vec3f vecf_c(itx->x(), itx->y(), itx->z());
+				++itx;
+
+				for (osg::Vec3Array::iterator ity = to_check_arr->begin();
+					ity != to_check_arr->end(); ) {
+
+					osg::Vec3f vecf_x(ity->x(), ity->y(), ity->z());
+					++ity;
+					vecf_x = vecf_x * mat;
+					osg::Vec3f vecf_y(ity->x(), ity->y(), ity->z());
+					++ity;
+					vecf_y = vecf_y * mat;
+					osg::Vec3f vecf_z(ity->x(), ity->y(), ity->z());
+					++ity;
+					vecf_z = vecf_z * mat;
+
+					if (NoDivTriTriIsect(vecf_a.ptr(), vecf_b.ptr(), vecf_c.ptr(),
+										 vecf_x.ptr(), vecf_y.ptr(), vecf_z.ptr())) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 private:
