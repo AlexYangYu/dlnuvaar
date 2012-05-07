@@ -23,8 +23,8 @@
 #include <osgART/MarkerCallback>
 #include <osgART/TransformFilterCallback>
 
-#include "XMLReader.h"
-#include "FileReader.h"
+#include "../FileReader/XMLReader.h"
+#include "../FileReader/FileReader.h"
 #include "../VAARDataModel/DataModel.h"
 #include "../VAARDataModel/Component.h"
 #include "KeyboardEventRouter.h"
@@ -141,6 +141,7 @@ public:
 		_box_2 = box_2;
 		_node_1 = node_1;
 		_node_2 = node_2;
+		_checked_arr = new osg::Vec3Array;
 	} // CollisionDetectionCallback
 
 	~CollisionDetectionCallback() {
@@ -171,16 +172,86 @@ public:
 		// BoundingBox-BoudingBox collision detection.
 		if (temp_box_1.intersects(temp_box_2)) {
 			osg::notify(osg::NOTICE) << "Collision Detected - Bounding Box!" << std::endl;
-			// BoundgingBox-Triangles collision detection.
+			
+			/* BoundgingBox-Triangles collision detection. */
+			
+			/* to select a less one */
+			osg::Array *temp_arr_1 = dynamic_cast<osg::Geode *>(_node_1)->getDrawable(0)->
+				asGeometry()->getVertexArray();
+			osg::Array *temp_arr_2 = dynamic_cast<osg::Geode *>(_node_2)->getDrawable(0)->
+				asGeometry()->getVertexArray();
+			
+			osg::Vec3Array *arr_first_check, *arr_second_check;
+			osg::Matrix *mat_to_check;
+			osg::BoundingBox *box_to_check;
+			if (temp_arr_1->getTotalDataSize() < temp_arr_2->getTotalDataSize()) {
+				arr_first_check = dynamic_cast<osg::Vec3Array *>(temp_arr_1);
+				arr_second_check = dynamic_cast<osg::Vec3Array *>(temp_arr_2);
+				mat_to_check = wc_mat_1;
+				box_to_check = &temp_box_2;
+			} else {
+				arr_first_check = dynamic_cast<osg::Vec3Array *>(temp_arr_2);
+				arr_second_check = dynamic_cast<osg::Vec3Array *>(temp_arr_1);
+				mat_to_check = wc_mat_2;
+				box_to_check = &temp_box_1;
+			}
+
+			/* to check intersection */
+			_checked_arr->clear();
+			for (osg::Vec3Array::iterator it = arr_first_check->begin(); 
+				it != arr_first_check->end(); ) {
+				
+				osg::Vec3 vec_x(it->x(), it->y(), it->z());
+				++it;
+				osg::Vec3 vec_y(it->x(), it->y(), it->z());
+				++it;
+				osg::Vec3 vec_z(it->x(), it->y(), it->z());
+				++it;
+				CheckIntersection(vec_x, vec_y, vec_z, mat_to_check, box_to_check);
+			}
+
+			osg::notify(osg::NOTICE) << _checked_arr->size() << std::endl;
 			// Triangles-Triangles collision detection.
 		} else {
 			osg::notify(osg::NOTICE) << "Not Collision Detected!" << std::endl;
 			return;
 		}
 	} // operator£¨)
+
+	bool CheckIntersection(
+		osg::Vec3 &vec_x, osg::Vec3 &vec_y, osg::Vec3 &vec_z, 
+		const osg::Matrix *mat, const osg::BoundingBox *box
+	) {
+		bool flag = false;
+		
+		vec_x = vec_x * (*mat);
+		if (box->contains(vec_x))
+			flag = true;
+
+		if (!flag) {
+			vec_y = vec_y * (*mat);
+			if (box->contains(vec_y))
+				flag = true;
+		}
+
+		if (!flag) {
+			vec_z = vec_z * (*mat);
+			if (box->contains(vec_z))
+				flag = true;
+		}
+
+		if (flag) {
+			_checked_arr->push_back(vec_x);
+			_checked_arr->push_back(vec_y);
+			_checked_arr->push_back(vec_z);
+		}
+		return flag;
+	}
+
 private:
 	osg::BoundingBox *_box_1, *_box_2;
 	osg::Node *_node_1, *_node_2;
+	osg::ref_ptr<osg::Vec3Array> _checked_arr;
 }; // CollisionDetectionCallback
 
 void Run(vaar_data::DataModel& data_model) {
@@ -359,8 +430,8 @@ int main() {
 	vaar_data::DataModel* data_model = new vaar_data::DataModel();
 	vaar_file::FileReader* file_reader = new vaar_file::XMLReader;
 	
-	//file_reader->Read("tutor.xml", *data_model);
-	file_reader->Read("asmexample.xml", *data_model);
+	file_reader->Read("tutor.xml", *data_model);
+	//file_reader->Read("asmexample.xml", *data_model);
 	if (NULL != file_reader)
 		delete file_reader;
 
